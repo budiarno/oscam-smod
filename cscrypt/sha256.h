@@ -35,10 +35,10 @@ extern "C" {
  */
 typedef struct
 {
-    uint32_t total[2];          /*!< number of bytes processed  */
-    uint32_t state[8];          /*!< intermediate digest state  */
-    unsigned char buffer[64];   /*!< data block being processed */
-    int is224;                  /*!< 0 => SHA-256, else SHA-224 */
+	uint32_t total[2];          /*!< number of bytes processed  */
+	uint32_t state[8];          /*!< intermediate digest state  */
+	unsigned char buffer[64];   /*!< data block being processed */
+	int is224;                  /*!< 0 => SHA-256, else SHA-224 */
 }
 mbedtls_sha256_context;
 
@@ -63,7 +63,7 @@ void mbedtls_sha256_free( mbedtls_sha256_context *ctx );
  * \param src      The context to be cloned
  */
 void mbedtls_sha256_clone( mbedtls_sha256_context *dst,
-                           const mbedtls_sha256_context *src );
+						   const mbedtls_sha256_context *src );
 
 /**
  * \brief          SHA-256 context setup
@@ -80,8 +80,7 @@ void mbedtls_sha256_starts( mbedtls_sha256_context *ctx, int is224 );
  * \param input    buffer holding the  data
  * \param ilen     length of the input data
  */
-void mbedtls_sha256_update( mbedtls_sha256_context *ctx, const unsigned char *input,
-                    size_t ilen );
+void mbedtls_sha256_update( mbedtls_sha256_context *ctx, const unsigned char *input, size_t ilen );
 
 /**
  * \brief          SHA-256 final digest
@@ -110,8 +109,7 @@ extern "C" {
  * \param output   SHA-224/256 checksum result
  * \param is224    0 = use SHA256, 1 = use SHA224
  */
-void mbedtls_sha256( const unsigned char *input, size_t ilen,
-           unsigned char output[32], int is224 );
+void mbedtls_sha256( const unsigned char *input, size_t ilen, unsigned char output[32], int is224 );
 
 /**
  * \brief          Checkup routine

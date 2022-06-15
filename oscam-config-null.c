@@ -5,6 +5,9 @@
 #include <unistd.h>
 #include "oscam-config-null.h"
 
+int tmp_conf;
+int res;
+
 /* maybe use it later
 #if !defined(cs_conf)
 
@@ -23,7 +26,6 @@ FILE* conf_file(char fileName[]){
 	FILE* file = fopen(fileName, "r");
 	if(file == NULL) {
 		int fd;
-		int tmp_conf;
 		tmp_conf = 0;
 
 		char *buffer;
@@ -36,7 +38,7 @@ FILE* conf_file(char fileName[]){
 			user_str = (char *) malloc(48);
 			snprintf(user_str, 48, "[account]\nuser = dvbapi\nau = 1\ngroup = 1\n\n");
 			strncpy(buffer, user_str, 48);
-			write(fd,buffer,strlen(buffer));
+			res = write(fd,buffer,strlen(buffer));
 			file = fopen(tempuser, "r");
 			tmp_conf = 1;
 			free(user_str);
@@ -57,7 +59,7 @@ FILE* conf_file(char fileName[]){
 			devices[3] = "usb-Argolis_Triple_Reader+_"; // Smargo Tripple+
 			detect_index = 4; // 0 counts
 
-			server_str = (char *) malloc(256);
+			server_str = (char *) malloc(512);
 
 			while (i < detect_index){
 
@@ -69,7 +71,7 @@ FILE* conf_file(char fileName[]){
 						if(strstr(namelist[ncount++]->d_name, devices[i])){
 							snprintf(server_str, 102, "[reader]\nlabel = %s\nprotocol = internal\ndetect = CD\ndevice = /dev/%s\ngroup = 1\nemmcache = 1,3,2\n\n", devices[i], devices[i]);
 							strncpy(buffer, server_str, 102);
-							write(fd,buffer,strlen(buffer));
+							res = write(fd,buffer,strlen(buffer));
 							i++;
 							tmp_conf = 1;
 						}
@@ -83,9 +85,9 @@ FILE* conf_file(char fileName[]){
 					while (ncount < n){
 						if(strstr(namelist[ncount++]->d_name, devices[i]))
 						{
-							snprintf(server_str, 256, "[reader]\nlabel = easymouse_%02d\nprotocol = mouse\ndetect = CD\ndevice = /dev/serial/by-id/%s\ngroup = 1\nemmcache = 1,3,2\n\n", cr, namelist[ncount-1]->d_name); cr++;
+							snprintf(server_str, 380, "[reader]\nlabel = easymouse_%02d\nprotocol = mouse\ndetect = CD\ndevice = /dev/serial/by-id/%s\ngroup = 1\nemmcache = 1,3,2\n\n", cr, namelist[ncount-1]->d_name); cr++;
 							strncpy(buffer, server_str, strlen(server_str));
-							write(fd,buffer,strlen(buffer));
+							res = write(fd,buffer,strlen(buffer));
 							tmp_conf = 1;
 						}
 					}
@@ -100,9 +102,9 @@ FILE* conf_file(char fileName[]){
 					if(strstr(namelist[ncount++]->d_name, devices[i]))
 					{
 						strncpy ( serial, namelist[ncount-1]->d_name+27, 8);
-						snprintf(server_str, 124, "\n[reader]\nlabel = Smargo_TP%d\nprotocol = smartreader\ndevice = TripleP%i;Serial:%s\ndetect = CD\ngroup = 1\nemmcache = 1,3,2\n\n", cr, cr, serial); cr++;
+						snprintf(server_str, 145, "\n[reader]\nlabel = Smargo_TP%d\nprotocol = smartreader\ndevice = TripleP%i;Serial:%s\ndetect = CD\ngroup = 1\nemmcache = 1,3,2\n\n", cr, cr, serial); cr++;
 						strncpy(buffer, server_str, strlen(server_str));
-						write(fd,buffer,strlen(buffer));
+						res = write(fd,buffer,strlen(buffer));
 						tmp_conf = 1;
 					}}
 				}
